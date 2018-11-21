@@ -1,0 +1,30 @@
+{
+  "name": "cityplanner",
+  "version": "0.1.0",
+  "description": "city planner website",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "city",
+    "planner",
+    "map",
+    "yelp",
+    "places",
+    "website"
+  ],
+  "author": "Carmen Sirés",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.16.4",
+    "mongodb": "^3.1.10",
+    "mongoose": "^5.3.13",
+    "pug": "^2.0.3"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "chai-http": "^4.2.0",
+    "mocha": "^5.2.0"
+  }
+}
