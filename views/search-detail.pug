@@ -1,0 +1,9 @@
+extends layout.pug
+
+block content
+  h1.mt-5= search.city
+    a.btn.btn-primary(href='/searches/' + search.id + '/update' style='margin-left: 25px') Update
+    form(action='/searches/' + search.id + '/delete' method="POST")
+      button.btn.btn-danger(type='submit') Delete
+  h6.mt-5= "Visit '" + search.city + "', in  " + search.numDays + " days."
+  p= search.numPlaces + " places"

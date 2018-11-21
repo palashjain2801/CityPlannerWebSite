@@ -1,0 +1,18 @@
+extends layout.pug
+
+block content
+  h1.mt-5 Searches
+    a.btn.btn-primary(href='./searches/new' style='margin-left: 25px') New
+  table.table
+    thead
+      tr
+        th(scope='col') City
+        th(scope='col') NumDays
+        th(scope='col') NumPlaces
+    tbody
+      each search in searches
+        tr
+          td
+            a(href='/searches/' + search.id)= search.city
+          td= search.numDays
+          td= search.numPlaces

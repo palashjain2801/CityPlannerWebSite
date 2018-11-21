@@ -1,0 +1,15 @@
+extends layout.pug
+
+block content
+  h1.mt-5= city
+  form(method="POST")
+    .form-group
+      label(for='city') City
+      input#city.form-control(type='text', placeholder='Enter city', name="city", value=search.city)
+    .form-group
+      label(for='numDays') Number of Days
+      input#numDays.form-control(type='text', placeholder='Enter number of days', name="numDays", value=search.numDays)
+    .form-group
+      label(for='numPlaces') Number of places
+      input#numPlaces.form-control(type='text', placeholder='Enter number of places', name="numPlaces", value=search.numPlaces)
+    button.btn.btn-primary(type='submit') Submit
