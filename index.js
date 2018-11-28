@@ -95,18 +95,25 @@ db.once('open', function() {
             if (search === null) {
               res.render('error', { message: "Not found" });
             } else {
-              listPlaces=getYelpPlaces(search.city,search.numPlaces);
-              console.log("2:"+listPlaces);
-              res.render('search-detail', { search: search });
+              listPlaces=getYelpPlaces(search.city,search.numPlaces, function(err,listPlaces){
+                if(err){
+                  console.log(err);
+                } else {
+                  console.log("3:"+listPlaces);
+                  search.listPlaces=listPlaces
+                  res.render('search-detail', { search: search });
+                }
+              });
+              
             }
           }
         });
 
       });
 
-      function getYelpPlaces(citySearch,numberPlaces){
+      function getYelpPlaces(citySearch,numberPlaces,cb){
         let listPlaces = [];
-        
+
         client.search({
           term: 'Things to do',
           location: citySearch,
@@ -119,8 +126,10 @@ db.once('open', function() {
             listPlaces.push(response.jsonBody.businesses[i].name);
           }
           console.log("1: "+listPlaces);
+          cb(null, listPlaces);
         }).catch(e => {
           console.log(e);
+          cb(e);
         });
 
         console.log("2: "+listPlaces);
