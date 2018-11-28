@@ -4,9 +4,9 @@
 
 ## Developers
 
-Carmen Sirés (A20432467) - Group leader
-Palash Jain (A20430557)
-Elijah Irizarry (A20371556, Git: Eirizarr)
+Carmen Sirés
+Palash Jain
+Elijah Irizarry (Git: Eirizarr)
 
 ### Intro
 

@@ -1,0 +1,25 @@
+extends layout.pug
+
+block content
+  h1.mt-5 City searches
+    a.btn.btn-success(href='./searches/new' style='margin-left: 25px') New
+  table.table
+    thead
+      tr
+        th(scope='col') City
+        th(scope='col') NumDays
+        th(scope='col') NumPlaces
+        th(scope='col') Update
+        th(scope='col') Delete
+    tbody
+      each search in searches
+        tr
+          td
+            a(href='/searches/' + search.id)= search.city
+          td= search.numDays
+          td= search.numPlaces
+          td
+            a.btn.btn-primary(href='/searches/' + search.id + '/update' style='margin-left: 25px') Update
+          td
+            form(action='/searches/' + search.id + '/delete' method="POST")
+              button.btn.btn-danger(type='submit') Delete
