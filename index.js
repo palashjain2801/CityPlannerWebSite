@@ -14,6 +14,10 @@ app.use(express.static('public'));
 app.set('view engine','pug');
 app.set('views', __dirname + '/views');
 
+const yelp = require('yelp-fusion');
+let apiKey = "aMbFl-deJHchPQOyqqlWlW2rjMoTFAHLumHzFphGyFMkMCMj199UWm7SkmtjX0jnuf_x6qomiVKDkhfGaAZ3EIr71093SuPQEa-pQq_F33snaWqOed5y2m0jnRzvW3Yx";
+const client = yelp.client(apiKey);
+
 var searchSchema = new mongoose.Schema({
     city: {type: String, required: true},
     numDays: {type: Number, required: true},
@@ -80,7 +84,8 @@ db.once('open', function() {
     
       //get a search (after clicking its title in the main page)
       app.get('/searches/:id', (req, res) => {
-        let id = ObjectID.createFromHexString(req.params.id)
+        let id = ObjectID.createFromHexString(req.params.id);
+        let listPlaces = [];
     
         Search.findById(id, function(err, search) {
           if (err) {
@@ -88,13 +93,39 @@ db.once('open', function() {
             res.render('error', {})
           } else {
             if (search === null) {
-              res.render('error', { message: "Not found" })
+              res.render('error', { message: "Not found" });
             } else {
-              res.render('search-detail', { search: search})
+              listPlaces=getYelpPlaces(search.city,search.numPlaces);
+              console.log("2:"+listPlaces);
+              res.render('search-detail', { search: search });
             }
           }
         });
+
       });
+
+      function getYelpPlaces(citySearch,numberPlaces){
+        let listPlaces = [];
+        
+        client.search({
+          term: 'Things to do',
+          location: citySearch,
+          sort_by: 'best_match',
+          limit: numberPlaces
+        }).then(response => {
+          for(let i=0;i<numberPlaces;i++)
+          {
+            //console.log(i+". "+response.jsonBody.businesses[i].name);
+            listPlaces.push(response.jsonBody.businesses[i].name);
+          }
+          console.log("1: "+listPlaces);
+        }).catch(e => {
+          console.log(e);
+        });
+
+        console.log("2: "+listPlaces);
+        return listPlaces;
+      }
     
       //from the update page (which is like new search page) we click update
       app.post('/searches/:id/update', function(req, res, next) {
