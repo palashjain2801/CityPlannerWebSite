@@ -135,6 +135,35 @@ db.once('open', function() {
         console.log("2: "+listPlaces);
         return listPlaces;
       }
+
+      //get a search (after clicking its title in the main page)
+      app.get('/searches/:id/map', (req, res) => {
+        let id = ObjectID.createFromHexString(req.params.id);
+        let listPlaces = [];
+    
+        Search.findById(id, function(err, search) {
+          if (err) {
+            console.log(err)
+            res.render('error', {})
+          } else {
+            if (search === null) {
+              res.render('error', { message: "Not found" });
+            } else {
+              listPlaces=getYelpPlaces(search.city,search.numPlaces, function(err,listPlaces){
+                if(err){
+                  console.log(err);
+                } else {
+                  console.log("3:"+listPlaces);
+                  search.listPlaces=listPlaces
+                  res.render('search-map', { search: search });
+                }
+              });
+              
+            }
+          }
+        });
+
+      });
     
       //from the update page (which is like new search page) we click update
       app.post('/searches/:id/update', function(req, res, next) {

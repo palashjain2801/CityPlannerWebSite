@@ -2,6 +2,7 @@ extends layout.pug
 
 block content
   h1.mt-5= "Visit " + search.city
+    a.btn.btn-primary(href='/searches/' + search.id + '/map' style='margin-left: 25px') Show Map
   h6.mt-5= "Visit '" + search.city + "', in  " + search.numDays + " days, seeing " + search.numPlaces + " places."
   table.table
     thead
