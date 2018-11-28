@@ -18,14 +18,9 @@ const yelp = require('yelp-fusion');
 let yelpApiKey = "aMbFl-deJHchPQOyqqlWlW2rjMoTFAHLumHzFphGyFMkMCMj199UWm7SkmtjX0jnuf_x6qomiVKDkhfGaAZ3EIr71093SuPQEa-pQq_F33snaWqOed5y2m0jnRzvW3Yx";
 const client = yelp.client(yelpApiKey);
 
-var GoogleMapsAPI = require('googlemaps');
-var publicConfig = {
-  key: 'AIzaSyCPW5-8k7Fl8tDAOejPpXXSlR6itOu5itI',
-  stagger_time:       1000, // for elevationPath
-  encode_polylines:   false,
-  secure:             true, // use https
-};
-var gmAPI = new GoogleMapsAPI(publicConfig);
+/*import {Map, View} from 'ol';
+import TileLayer from 'ol/layer/Tile';
+import OSM from 'ol/source/OSM';*/
 
 var searchSchema = new mongoose.Schema({
     city: {type: String, required: true},
@@ -108,7 +103,6 @@ db.once('open', function() {
                 if(err){
                   console.log(err);
                 } else {
-                  console.log("3:"+listPlaces);
                   search.listPlaces=listPlaces
                   res.render('search-detail', { search: search });
                 }
@@ -134,14 +128,11 @@ db.once('open', function() {
             //console.log(i+". "+response.jsonBody.businesses[i].name);
             listPlaces.push(response.jsonBody.businesses[i].name);
           }
-          console.log("1: "+listPlaces);
           cb(null, listPlaces);
         }).catch(e => {
           console.log(e);
           cb(e);
         });
-
-        console.log("2: "+listPlaces);
         return listPlaces;
       }
 
@@ -162,39 +153,21 @@ db.once('open', function() {
                 if(err){
                   console.log(err);
                 } else {
-                  console.log("3:"+listPlaces);
                   search.listPlaces=listPlaces
 
-                  var params = {
-                    center: 'Navy Pier Chicago',
-                    zoom: 15,
-                    size: '500x400',
-                    maptype: 'roadmap',
-                    markers: [
-                      {
-                        location: 'The Cloud Gate Chicago',
-                        label   : 'The Cloud Gate',
-                        color   : 'green',
-                        shadow  : true
-                      },
-                      {
-                        location: 'Navy Pier Chicago',
-                        color: 'red'
-                      }
+                  /*const map = new Map({
+                    target: 'map',
+                    layers: [
+                      new TileLayer({
+                        source: new OSM()
+                      })
                     ],
-                    style: [
-                      {
-                        feature: 'road',
-                        element: 'all',
-                        rules: {
-                          hue: '0x00ff00'
-                        }
-                      }
-                    ]
-                  };
-                  let urlMap = gmAPI.staticMap(params);
-                  search.imageUrl=urlMap;
-                  console.log(urlMap);
+                    view: new View({
+                      center: [0, 0],
+                      zoom: 0
+                    })
+                  });*/
+                  
                   res.render('search-map', { search: search });
                   
                 }
