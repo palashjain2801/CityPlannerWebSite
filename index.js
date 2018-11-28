@@ -15,8 +15,17 @@ app.set('view engine','pug');
 app.set('views', __dirname + '/views');
 
 const yelp = require('yelp-fusion');
-let apiKey = "aMbFl-deJHchPQOyqqlWlW2rjMoTFAHLumHzFphGyFMkMCMj199UWm7SkmtjX0jnuf_x6qomiVKDkhfGaAZ3EIr71093SuPQEa-pQq_F33snaWqOed5y2m0jnRzvW3Yx";
-const client = yelp.client(apiKey);
+let yelpApiKey = "aMbFl-deJHchPQOyqqlWlW2rjMoTFAHLumHzFphGyFMkMCMj199UWm7SkmtjX0jnuf_x6qomiVKDkhfGaAZ3EIr71093SuPQEa-pQq_F33snaWqOed5y2m0jnRzvW3Yx";
+const client = yelp.client(yelpApiKey);
+
+var GoogleMapsAPI = require('googlemaps');
+var publicConfig = {
+  key: 'AIzaSyCPW5-8k7Fl8tDAOejPpXXSlR6itOu5itI',
+  stagger_time:       1000, // for elevationPath
+  encode_polylines:   false,
+  secure:             true, // use https
+};
+var gmAPI = new GoogleMapsAPI(publicConfig);
 
 var searchSchema = new mongoose.Schema({
     city: {type: String, required: true},
@@ -155,7 +164,39 @@ db.once('open', function() {
                 } else {
                   console.log("3:"+listPlaces);
                   search.listPlaces=listPlaces
+
+                  var params = {
+                    center: 'Navy Pier Chicago',
+                    zoom: 15,
+                    size: '500x400',
+                    maptype: 'roadmap',
+                    markers: [
+                      {
+                        location: 'The Cloud Gate Chicago',
+                        label   : 'The Cloud Gate',
+                        color   : 'green',
+                        shadow  : true
+                      },
+                      {
+                        location: 'Navy Pier Chicago',
+                        color: 'red'
+                      }
+                    ],
+                    style: [
+                      {
+                        feature: 'road',
+                        element: 'all',
+                        rules: {
+                          hue: '0x00ff00'
+                        }
+                      }
+                    ]
+                  };
+                  let urlMap = gmAPI.staticMap(params);
+                  search.imageUrl=urlMap;
+                  console.log(urlMap);
                   res.render('search-map', { search: search });
+                  
                 }
               });
               
