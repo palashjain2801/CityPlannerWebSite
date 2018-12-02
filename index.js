@@ -18,10 +18,6 @@ const yelp = require('yelp-fusion');
 let yelpApiKey = "aMbFl-deJHchPQOyqqlWlW2rjMoTFAHLumHzFphGyFMkMCMj199UWm7SkmtjX0jnuf_x6qomiVKDkhfGaAZ3EIr71093SuPQEa-pQq_F33snaWqOed5y2m0jnRzvW3Yx";
 const client = yelp.client(yelpApiKey);
 
-/*import {Map, View} from 'ol';
-import TileLayer from 'ol/layer/Tile';
-import OSM from 'ol/source/OSM';*/
-
 var searchSchema = new mongoose.Schema({
     city: {type: String, required: true},
     numDays: {type: Number, required: true},
@@ -154,19 +150,6 @@ db.once('open', function() {
                   console.log(err);
                 } else {
                   search.listPlaces=listPlaces
-
-                  /*const map = new Map({
-                    target: 'map',
-                    layers: [
-                      new TileLayer({
-                        source: new OSM()
-                      })
-                    ],
-                    view: new View({
-                      center: [0, 0],
-                      zoom: 0
-                    })
-                  });*/
                   
                   res.render('search-map', { search: search });
                   
