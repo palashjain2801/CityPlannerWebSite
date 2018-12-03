@@ -22,23 +22,23 @@ let map = new ol.Map({
 });
 
 
-  console.log('center is:', centerCoor);
+let features = [];
 
+for(let i=0;i<listPlaces.length;i++)
+{
+  let coor = ol.proj.fromLonLat([listPlaces[i].coordinates.longitude, listPlaces[i].coordinates.latitude]);
+  let feature = 
+    new ol.Feature({
+    geometry: new ol.geom.Point(coor),
+    name: listPlaces[i].name,
+    description: listPlaces[i].name
+  })
+  features.push(feature);
+}
 
   var markers = new ol.layer.Vector({
     source: new ol.source.Vector({
-      features: [
-        new ol.Feature({
-          geometry: new ol.geom.Point(centerCoor),
-          name: 'Crescent St',
-          description: 'Apartment'
-        }),
-        new ol.Feature({
-          geometry: new ol.geom.Point(otherCoor),
-          name: 'Long Island City',
-          desctiption: 'Apartment'
-        })
-      ]
+      features: features
     }),
     style: new ol.style.Style({
       image: new ol.style.Icon({
@@ -51,12 +51,12 @@ let map = new ol.Map({
       })
     })
   });
-  map.addLayer(markers);
 
+map.addLayer(markers);
 
-  console.log(search.city);
-  console.log(search.numDays);
-  console.log(listPlaces);
+console.log(search.city);
+console.log(search.numDays);
+console.log(listPlaces);
   
 
 
