@@ -95,7 +95,7 @@ db.once('open', function() {
             if (search === null) {
               res.render('error', { message: "Not found" });
             } else {
-              listPlaces=getYelpPlaces(search.city,search.numPlaces, function(err,listPlaces){
+              listPlaces=getYelpPlaces(search.city,search.numPlaces,search.numDays, function(err,listPlaces){
                 if(err){
                   console.log(err);
                 } else {
@@ -110,19 +110,36 @@ db.once('open', function() {
 
       });
 
-      function getYelpPlaces(citySearch,numberPlaces,cb){
+      function getYelpPlaces(citySearch,numberPlaces,numberDays,cb){
         let listPlaces = [];
-
+        
         client.search({
           term: 'Things to do',
           location: citySearch,
           sort_by: 'best_match',
           limit: numberPlaces
         }).then(response => {
+
+          let nPlacesDay=Math.floor(numberPlaces/numberDays);
+          let rest = numberPlaces%numberDays;
+          let realDay=1;
+          let counterPlacesDay=-1;
+
           for(let i=0;i<numberPlaces;i++)
           {
-            //console.log(i+". "+response.jsonBody.businesses[i].name);
+            counterPlacesDay++;
             listPlaces.push(response.jsonBody.businesses[i]);
+            let day=Math.floor(i/nPlacesDay) + 1;
+            if(day>numberDays-rest) //one more place to see each day, so nPlacesDay is one more
+            {
+              nPlacesDay=Math.floor(numberPlaces/numberDays)+1;
+            }
+            if(counterPlacesDay==nPlacesDay)
+            {
+              realDay++;
+              counterPlacesDay=0;
+            }
+            listPlaces[i].day=realDay;
           }
           cb(null, listPlaces);
         }).catch(e => {
@@ -145,7 +162,7 @@ db.once('open', function() {
             if (search === null) {
               res.render('error', { message: "Not found" });
             } else {
-              listPlaces=getYelpPlaces(search.city,search.numPlaces, function(err,listPlaces){
+              listPlaces=getYelpPlaces(search.city,search.numPlaces, search.numDays, function(err,listPlaces){
                 if(err){
                   console.log(err);
                 } else {

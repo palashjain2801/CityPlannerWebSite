@@ -1,14 +1,18 @@
 extends layout.pug
 
 block content
-  h1.mt-5= "Visit " + search.city
+  h1.mt-5= "Places to visit in " + search.city
     a.btn.btn-primary(href='/searches/' + search.id + '/map' style='margin-left: 25px') Show Map
-  h6.mt-5= "Visit '" + search.city + "', in  " + search.numDays + " days, seeing " + search.numPlaces + " places."
+  h6.mt-5= "Visit " + search.city + " in  " + search.numDays + " days, seeing " + search.numPlaces + " places."
   table.table
-    thead
-      tr
-        th(scope='col') Places to visit
     tbody
       each place in search.listPlaces
         tr
-          td= place.name
+          td
+            img(src=place.image_url style="width:60px;height:60px;")
+          td
+            h6= place.name
+            h8(style="color:gray;")= "visit on day "+place.day+"\n"
+          td
+            a(href=place.url) more info
+

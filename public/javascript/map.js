@@ -66,7 +66,7 @@ map.addLayer(markers);
 
 
 
-//draw lines between places
+//draw lines between places (IT DOES NOT WORK)
 let vectorSource = new ol.source.Vector({});
 let lineString = new ol.geom.MultiLineString(coords);
 
@@ -88,6 +88,8 @@ let layerLines = new ol.layer.Vector({
 vectorSource.addFeature(feature1)
 map.addLayer(layerLines);
 
+
+//SOME CODE THAT DIDN'T WORK EITHER
 //add the routes between markers
 /*var params = {
   LAYERS: 'pgrouting:pgrouting',
