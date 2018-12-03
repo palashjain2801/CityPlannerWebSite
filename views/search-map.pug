@@ -4,7 +4,6 @@ html
     link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css', integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm", crossorigin="anonymous")
     link(rel='stylesheet', href='https://openlayers.org/en/v4.6.5/css/ol.css', type='text/css')
     script(src='https://openlayers.org/en/v4.6.5/build/ol.js')
-    //link(rel='stylesheet', href='../public/css/mapStyle.css', type='text/css')
   body
     header
       nav.navbar.navbar-expand-md.navbar-dark.bg-dark
@@ -12,12 +11,15 @@ html
         button.navbar-toggler(type='button', data-toggle='collapse', data-target='#navbarCollapse', aria-controls='navbarCollapse', aria-expanded='false', aria-label='Toggle navigation')
           span.navbar-toggler-icon
     main.container(role='main')
-      h1.mt-5= "Visit " + search.city
+      h2.mt-5= "Visit " + search.city
       #map.map(tabindex='0')
-      button#zoom-out Zoom out
-      button#zoom-in Zoom in
+      //button#zoom-out Zoom out
+      //button#zoom-in Zoom in
+      script(type='text/javascript').
+        let search = !{JSON.stringify(search)};
+        let listPlaces=!{JSON.stringify(search.listPlaces)};
       script
-        include map.js
+        include ../public/javascript/map.js
 
     script(src='https://code.jquery.com/jquery-3.2.1.slim.min.js', integrity='sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN', crossorigin='anonymous')
     script(src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js', integrity='sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q', crossorigin='anonymous')

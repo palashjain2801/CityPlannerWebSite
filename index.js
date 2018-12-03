@@ -122,7 +122,7 @@ db.once('open', function() {
           for(let i=0;i<numberPlaces;i++)
           {
             //console.log(i+". "+response.jsonBody.businesses[i].name);
-            listPlaces.push(response.jsonBody.businesses[i].name);
+            listPlaces.push(response.jsonBody.businesses[i]);
           }
           cb(null, listPlaces);
         }).catch(e => {
