@@ -46,8 +46,8 @@ for(let i=0;i<listPlaces.length;i++)
         anchor: [0.5, 46],
         anchorXUnits: 'fraction',
         anchorYUnits: 'pixel',
-        opacity: 0.75,
-        src: 'https://cdn4.iconfinder.com/data/icons/spirit20/marker-delete.png',
+        opacity: 0.95,
+        src: 'http://oi66.tinypic.com/wji0lj.jpg'
       })
     })
   });
