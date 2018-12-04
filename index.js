@@ -110,6 +110,8 @@ db.once('open', function() {
 
       });
 
+
+      //THIS FUNCTION RETURNS AN ARRAY OF PLACES MAKING A QUERY TO THE YELP API
       function getYelpPlaces(citySearch,numberPlaces,numberDays,cb){
         let listPlaces = [];
         
@@ -119,7 +121,27 @@ db.once('open', function() {
           sort_by: 'best_match',
           limit: numberPlaces
         }).then(response => {
+          for(let i=0;i<numberPlaces;i++)
+          {
+            listPlaces.push(response.jsonBody.businesses[i]);
+          }
 
+          listPlaces=getPlacesWithDays(listPlaces,numberPlaces,numberDays);
+          cb(null, listPlaces);
+        }).catch(e => {
+          console.log(e);
+          cb(e);
+        });
+        return listPlaces;
+      }
+
+      function getOptimizedRoute(listPlaces,numPlaces){
+        return listPlaces;
+      }
+
+      
+
+      function getPlacesWithDays(listPlaces,numberPlaces,numberDays){
           let nPlacesDay=Math.floor(numberPlaces/numberDays);
           let rest = numberPlaces%numberDays;
           let realDay=1;
@@ -128,7 +150,6 @@ db.once('open', function() {
           for(let i=0;i<numberPlaces;i++)
           {
             counterPlacesDay++;
-            listPlaces.push(response.jsonBody.businesses[i]);
             let day=Math.floor(i/nPlacesDay) + 1;
             if(day>numberDays-rest) //one more place to see each day, so nPlacesDay is one more
             {
@@ -141,12 +162,7 @@ db.once('open', function() {
             }
             listPlaces[i].day=realDay;
           }
-          cb(null, listPlaces);
-        }).catch(e => {
-          console.log(e);
-          cb(e);
-        });
-        return listPlaces;
+        return listPlaces
       }
 
       //get a search (after clicking its title in the main page)
