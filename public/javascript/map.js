@@ -56,7 +56,7 @@ for(let i=0;i<listPlaces.length;i++)
         anchorXUnits: 'fraction',
         anchorYUnits: 'pixel',
         opacity: 0.95,
-        src: 'http://oi66.tinypic.com/wji0lj.jpg'
+        src: 'http://i65.tinypic.com/mmx1dl.png'
       })
     })
   });
