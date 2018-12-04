@@ -15,4 +15,5 @@ block content
             h8(style="color:gray;")= "visit on day "+place.day+"\n"
           td
             a(href=place.url) more info
-
+            - var time= Math.floor(Math.random()* 80 + 30)
+            h6= 'Estimated time of stay: ' + time + ' minutes.'

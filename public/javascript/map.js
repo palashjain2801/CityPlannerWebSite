@@ -32,7 +32,6 @@ let map = new ol.Map({
 
 //create an array of features (markers) to show all the places of the list
 let features = [];
-
 for(let i=0;i<listPlaces.length;i++)
 {
   let coor = ol.proj.fromLonLat([listPlaces[i].coordinates.longitude, listPlaces[i].coordinates.latitude]);
@@ -68,13 +67,77 @@ map.addLayer(markers);
 
 //draw lines between places (IT DOES NOT WORK)
 let vectorSource = new ol.source.Vector({});
+// function Distancebtw(x1,x2,y1,y2)
+// {
+//
+//   // let sub1= x2-x1;
+//   // let sub2= y2-y1;
+//   // let p= sub1*sub1 + sub2 * sub2;
+//   // console.log("this is Dis"+ Math.sqrt(p));
+//   var R = 6371; // km
+// var dLat1 = (x2 - x1);
+// var dLon1 = (y2 - y1);
+// let dLat = dLat1.toRad();
+// let dLon = dLon1.to
+// var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+//         Math.cos(lat1.toRad()) * Math.cos(lat2.toRad()) *
+//         Math.sin(dLon/2) * Math.sin(dLon/2);
+// var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+// var d = R * c;
+// console.log("this is Dis"+ d);
+// }
 
+
+
+function Distancebtw(lat1, lat2, lon1, lon2,i,startloc,destloc) {
+    //Radius of the earth in:  1.609344 miles,  6371 km  | var R = (6371 / 1.609344);
+    var distance = [];
+    var R = 3958.7558657440545; // Radius of earth in Miles
+    var dLat = toRad(lat2-lat1);
+    var dLon = toRad(lon2-lon1);
+    var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+            Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
+            Math.sin(dLon/2) * Math.sin(dLon/2);
+    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    var d = R * c;
+    console.log("this is Dis"+d);
+    distance[i] = Math.round(d * 100) / 100;
+   console.log('this is the distance object'+d)
+
+   var para = document.createElement("p");
+   var node = document.createTextNode('The Distance between Location ' + startloc + ' and '+ destloc +' is ' + distance[i] + ' miles.');
+   para.appendChild(node);
+   var element = document.getElementById("div1");
+   element.appendChild(para);
+    return d,distance;
+}
+
+function toRad(Value) {
+    /** Converts numeric degrees to radians */
+    return Value * Math.PI / 180;
+}
 for(let i=0;i<listPlaces.length;i++)
 {
 let startCoord1 = ol.proj.fromLonLat([listPlaces[i].coordinates.longitude, listPlaces[i].coordinates.latitude]);
 let destCoord1 = ol.proj.fromLonLat([listPlaces[i+1].coordinates.longitude, listPlaces[i+1].coordinates.latitude]);
 let coords1 = [startCoord1,destCoord1];
 let lineString = new ol.geom.LineString(coords1);
+
+console.log("this is cordo"+[listPlaces[0].coordinates.longitude]);
+let x1=[listPlaces[i].coordinates.longitude];
+let x2=[listPlaces[i+1].coordinates.longitude];
+let startloc1=[listPlaces[i].name]
+let destloc1=[listPlaces[i+1].name]
+let y1=[listPlaces[i].coordinates.latitude];
+let y2=[listPlaces[i+1].coordinates.latitude];
+console.log("the x1 is "+x1);
+console.log("the x2 is "+x2);
+console.log("the y1 is "+y1);
+console.log("the y2 is "+y1);
+Distancebtw(y1,y2,x1,x2,i,startloc1,destloc1);
+
+
+
 
 let feature1 = new ol.Feature({
   geometry: lineString,
@@ -94,6 +157,8 @@ let layerLines = new ol.layer.Vector({
 
 map.addLayer(layerLines);
 };
+
+
 
 //SOME CODE THAT DIDN'T WORK EITHER
 //add the routes between markers
