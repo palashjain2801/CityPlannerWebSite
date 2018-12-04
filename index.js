@@ -114,7 +114,6 @@ db.once('open', function() {
       //THIS FUNCTION RETURNS AN ARRAY OF PLACES MAKING A QUERY TO THE YELP API
       function getYelpPlaces(citySearch,numberPlaces,numberDays,cb){
         let listPlaces = [];
-        
         client.search({
           term: 'Things to do',
           location: citySearch,
@@ -124,8 +123,9 @@ db.once('open', function() {
           for(let i=0;i<numberPlaces;i++)
           {
             listPlaces.push(response.jsonBody.businesses[i]);
+            console.log("response "+i+": "+listPlaces[i].name);
           }
-
+          listPlaces=getOptimizedRoute(listPlaces,numberPlaces);
           listPlaces=getPlacesWithDays(listPlaces,numberPlaces,numberDays);
           cb(null, listPlaces);
         }).catch(e => {
@@ -135,11 +135,57 @@ db.once('open', function() {
         return listPlaces;
       }
 
-      function getOptimizedRoute(listPlaces,numPlaces){
-        return listPlaces;
+      function getOptimizedRoute(listPlaces,numberPlaces){
+        //console.log("OPTIM ROUTE "+listPlaces[0].name);
+        let initialRoute=getShortestRoute(listPlaces,listPlaces[0]);
+        //console.log("INIT ROUTE LEN: "+initialRoute.length);
+        let finalRoute=getShortestRoute(initialRoute,initialRoute[numberPlaces-1]);
+        //console.log("FINAL ROUTE LEN: "+finalRoute.length);
+        return finalRoute;
       }
 
-      
+      function getShortestRoute(listPlaces,origin){
+        //console.log("SHORTEST ROUTE "+listPlaces[1].name);
+        let newList=[];
+        newList.push(origin); 
+        let index=listPlaces.indexOf(origin);
+        listPlaces.splice(index, 1);
+        let size=listPlaces.length;
+        for(let i=0;i<size-1;i++){
+          let nextPlace=getNearestPlace(listPlaces,origin);
+          let pos=listPlaces.indexOf(nextPlace);
+          newList.push(nextPlace);
+          listPlaces.splice(pos, 1);
+          origin=nextPlace;
+        }
+        newList.push(listPlaces[0]);
+        return newList;
+      }
+
+      function getNearestPlace(listPlaces,origin){
+        
+        let next=listPlaces[0];
+        let distanceMin=getDistance(origin,next);
+        for(let i=0;i<listPlaces.length;i++){
+          let distance=getDistance(origin,listPlaces[i]);
+          if(distance<distanceMin){
+            distanceMin=distance;
+            next=listPlaces[i];
+          }
+        }
+        //console.log("NEAREST PLACE "+next.name);
+        return next;
+      }
+
+      function getDistance(p1,p2){
+        let p1lat=p1.coordinates.latitude;
+        let p1lon=p1.coordinates.longitude;
+        let p2lat=p2.coordinates.latitude;
+        let p2lon=p2.coordinates.longitude;
+        let distance=Math.sqrt(Math.pow(p1lat-p2lat,2)+Math.pow(p1lon-p2lon,2));
+        //console.log("DISTANCE: "+distance);
+        return distance;
+      }
 
       function getPlacesWithDays(listPlaces,numberPlaces,numberDays){
           let nPlacesDay=Math.floor(numberPlaces/numberDays);
