@@ -36,7 +36,7 @@ let features = [];
 for(let i=0;i<listPlaces.length;i++)
 {
   let coor = ol.proj.fromLonLat([listPlaces[i].coordinates.longitude, listPlaces[i].coordinates.latitude]);
-  let feature = 
+  let feature =
     new ol.Feature({
     geometry: new ol.geom.Point(coor),
     name: listPlaces[i].name,
@@ -68,7 +68,13 @@ map.addLayer(markers);
 
 //draw lines between places (IT DOES NOT WORK)
 let vectorSource = new ol.source.Vector({});
-let lineString = new ol.geom.MultiLineString(coords);
+
+for(let i=0;i<listPlaces.length;i++)
+{
+let startCoord1 = ol.proj.fromLonLat([listPlaces[i].coordinates.longitude, listPlaces[i].coordinates.latitude]);
+let destCoord1 = ol.proj.fromLonLat([listPlaces[i+1].coordinates.longitude, listPlaces[i+1].coordinates.latitude]);
+let coords1 = [startCoord1,destCoord1];
+let lineString = new ol.geom.LineString(coords1);
 
 let feature1 = new ol.Feature({
   geometry: lineString,
@@ -80,14 +86,14 @@ let feature1 = new ol.Feature({
     })
   })
 });
-
+vectorSource.addFeature(feature1)
+console.log("first");
 let layerLines = new ol.layer.Vector({
   source: vectorSource
 });
 
-vectorSource.addFeature(feature1)
 map.addLayer(layerLines);
-
+};
 
 //SOME CODE THAT DIDN'T WORK EITHER
 //add the routes between markers
@@ -157,7 +163,4 @@ let vectorLayerPolyline = new ol.layer.Vector({
   style: line_style
 });
 
-map.addLayer(vectorLayerPolyline); */    
-
-
-
+map.addLayer(vectorLayerPolyline); */
