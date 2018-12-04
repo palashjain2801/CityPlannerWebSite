@@ -103,9 +103,10 @@ function Distancebtw(lat1, lat2, lon1, lon2,i,startloc,destloc) {
     console.log("this is Dis"+d);
     distance[i] = Math.round(d * 100) / 100;
    console.log('this is the distance object'+d)
+   var timedoc =Math.round((distance[i]/20) * 60 + 10);
 
    var para = document.createElement("p");
-   var node = document.createTextNode('The Distance between Location ' + startloc + ' and '+ destloc +' is ' + distance[i] + ' miles.');
+   var node = document.createTextNode('The Distance between Location ' + startloc + ' and '+ destloc +' is ' + distance[i] + ' miles.' + " Time required via Pubic Transport " + timedoc + "min");
    para.appendChild(node);
    var element = document.getElementById("div1");
    element.appendChild(para);
