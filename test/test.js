@@ -46,8 +46,58 @@ describe('CORRECT TEST', function () {
         }); 
     });
 
+    describe('/DELETE search', function() {
+        it('should delete a search', (done) => {
+            
+            chai.request(url)
+            .delete('/api/searches/'+idSearch)
+            .send(newSearch)
+            .end((err,res) => {
+                //console.log(res.body);
+                res.should.have.status(204);
+                done();
+            });
+        });
+
+        it('should return 404 Not Found', (done) => {
+            chai.request(url)
+            .get('/api/searches/'+idSearch)
+            .end((err,res) => {
+                res.should.have.status(404);
+                done();
+            });
+        });
+
+    });
+
     
     });
+
+    describe('INCORRECT TEST', function () {
+    
+        describe('/POST search', function() {
+            it('should not add a search', (done) => {
+                newSearch = {
+                    city: 'Chicago',
+                    numPlaces: 5
+                }
+    
+                chai.request(url)
+                .post('/api/searches')
+                .send(newSearch)
+                .end((err,res) => {
+                    //console.log(res.body);
+                    idSearch = res.body._id;
+                    res.should.have.status(500);
+                    done();
+                });
+            });
+        });
+    
+        
+    
+        
+        });
         
 
     
