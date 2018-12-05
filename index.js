@@ -77,6 +77,7 @@ db.once('open', function() {
             console.log(err)
             res.render('search-form', { search: newSearch, error: err })
           } else {
+            
             res.redirect('/searches/' + savedSearch.id);
           }
         });
@@ -130,10 +131,12 @@ db.once('open', function() {
           cb(null, listPlaces);
         }).catch(e => {
           console.log(e);
+          alert("invalid city");
           cb(e);
         });
         return listPlaces;
       }
+
 
       function getOptimizedRoute(listPlaces,numberPlaces){
         //console.log("OPTIM ROUTE "+listPlaces[0].name);
@@ -234,7 +237,6 @@ db.once('open', function() {
                   
                 }
               });
-              
             }
           }
         });
